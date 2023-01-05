@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-do List</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-5">
+  <h1>To-do list</h1>
+
+  <form method="post" action="{% url 'task_add' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="name">Task name</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Task description</label>
+      <input type="text" class="form-control" id="description" name="description">
+    </div>
+    <button type="submit" class="btn btn-primary">Add task</button>
+  </form>
+
+  <ul class="list-group mt-3">
+    {% for task in tasks %}
+      <li class="list-group-item">
+        <form method="post" action="{% url 'task_complete' task.id %}">
+          {% csrf_token %}
+          <p>{{ task.name }}</p>
+          <p>{{ task.description }}</p>
+          {% if task.completed %}
+            <p>Completed</p>
+          {% else %}
+            <p>Not completed</p>
+            <a href="{% url 'task_complete' task.id %}" class="btn btn-success">Mark as complete</a>
+          {% endif %}
+        </form>
+
+        <form method="post" action="{% url 'task_delete' task.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete task</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.0/dist/umd/popper.min.js" integrity="sha384-sP+oJL6I+ZQ2sZbxmU6/Yc6mCm6fX9sAJW6EOfDd2Q+9lI3xrArW6U8BJ7VuLeC" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
